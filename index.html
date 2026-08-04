@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WorldCycle is a self-verifiable reinforcement learning framework for long-horizon video world models.">
+  <meta name="theme-color" content="#070914">
+  <title>WorldCycle — Self-Verifiable RL for Video World Models</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="scripts/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <div class="ambient" aria-hidden="true">
+    <span class="ambient__orb ambient__orb--one"></span>
+    <span class="ambient__orb ambient__orb--two"></span>
+    <span class="ambient__grid"></span>
+  </div>
+
+  <nav class="site-nav" id="siteNav" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a class="brand" href="#overview" aria-label="WorldCycle home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>World<span>Cycle</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#method">Method</a>
+        <a href="#cyclebench">CycleBench</a>
+        <a href="#comparisons">Comparisons</a>
+        <a href="#results">Results</a>
+        <a href="#citation">Citation</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content">
+    <section class="hero" id="overview">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow"><span></span> Self-verifiable reinforcement learning</div>
+          <h1>World<span>Cycle</span></h1>
+          <p class="hero-title">Self-Verifiable Reinforcement Learning for Long-Horizon Video World Models</p>
+          <p class="hero-lede">Turn reversible action cycles into dense, annotation-free supervision for world models that remain consistent over long horizons.</p>
+          <div class="submission-line">
+            <span class="submission-avatar" aria-hidden="true">A</span>
+            <span><strong>Anonymous Submission</strong><small>Research project page</small></span>
+          </div>
+        </div>
+
+        <div class="cycle-visual reveal reveal-delay" aria-label="A closed action cycle returning to its starting state">
+          <div class="orbit orbit--outer"></div>
+          <div class="orbit orbit--inner"></div>
+          <div class="orbit-glow"></div>
+          <div class="cycle-core">
+            <span class="cycle-core__label">closed loop</span>
+            <strong>state<sub>0</sub></strong>
+            <span class="cycle-core__return">returns verified</span>
+          </div>
+          <span class="action-node action-node--one"><b>W</b><small>forward</small></span>
+          <span class="action-node action-node--two"><b>D</b><small>turn</small></span>
+          <span class="action-node action-node--three"><b>S</b><small>inverse</small></span>
+          <span class="action-node action-node--four"><b>A</b><small>close</small></span>
+          <span class="phase phase--one">t<sub>0</sub></span>
+          <span class="phase phase--two">t<sub>k</sub></span>
+        </div>
+      </div>
+
+      <div class="container hero-stats reveal">
+        <article><strong>44<sup>%</sup></strong><span>lower state-return<br>drift, at best</span></article>
+        <article><strong>4<sup>×</sup></strong><span>composite-action<br>accuracy vs. base</span></article>
+        <article><strong>4</strong><span>CycleBench<br>task families</span></article>
+        <article><strong>0</strong><span>ground-truth future<br>videos required</span></article>
+      </div>
+    </section>
+
+    <section class="section section--compact" aria-labelledby="abstract-title">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="section-index">01 / Overview</span>
+          <h2 id="abstract-title">A verification signal hidden <em>inside the action.</em></h2>
+        </div>
+
+        <div class="abstract-layout">
+          <div class="abstract-copy reveal">
+            <p class="lead">Interactive video world models are essential for long-horizon planning and exploration, yet they suffer from compounding errors. Reinforcement learning can improve these models, but it faces a verification bottleneck: for arbitrary action sequences, no ground-truth future state exists to measure long-term drift.</p>
+            <p>WorldCycle exploits a structural exception. A reversible action sequence composed with its inverse must analytically return to the initial state. This turns closed action cycles into annotation-free supervision on long-horizon correctness.</p>
+            <p>The framework constructs closed cycles and repeated executions from ordinary action sequences, then optimizes a <mark>spatial closure reward</mark> between mirrored forward and reverse states and a <mark>temporal consistency reward</mark> across repeated cycles.</p>
+          </div>
+          <aside class="insight-card reveal reveal-delay">
+            <span class="insight-card__kicker">Key insight</span>
+            <blockquote>“If the action program is the identity, the recovered visual state should be the identity too.”</blockquote>
+            <div class="identity-equation" aria-label="An action cycle composed with its inverse equals the identity">
+              <span>C</span><span class="operator">∘</span><span>C<sup>−1</sup></span><span class="operator">=</span><span class="identity">I</span>
+            </div>
+          </aside>
+        </div>
+
+        <figure class="paper-figure reveal">
+          <a href="assets/figures/teaser_figure.png" target="_blank" rel="noreferrer" aria-label="Open the state-returning failure figure at full size">
+            <img src="assets/figures/teaser_figure.png" alt="Comparison of WorldPlay, WorldCompass, and WorldCycle across two 253-frame action cycles. WorldCycle returns more closely to the same visual state." loading="lazy">
+          </a>
+          <figcaption><span>Figure 1</span> State-returning failure in interactive video world models. Spatial closure and temporal consistency errors accumulate as autoregressive rollouts extend.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="method" aria-labelledby="method-title">
+      <div class="container">
+        <div class="section-heading section-heading--split reveal">
+          <div>
+            <span class="section-index">02 / Method</span>
+            <h2 id="method-title">Close the loop.<br><em>Then learn from it.</em></h2>
+          </div>
+          <p>WorldCycle turns analytically known action structure into trajectory-level rewards, making long-horizon post-training verifiable without future video labels.</p>
+        </div>
+
+        <div class="process-grid">
+          <article class="process-card reveal">
+            <span class="process-card__num">01</span>
+            <div class="process-icon process-icon--cycle" aria-hidden="true"><span>W</span><span>S</span></div>
+            <h3>Construct cycles</h3>
+            <p>Compose ordinary action blocks with their inverses, then repeat the closed program across multiple temporal scales.</p>
+          </article>
+          <article class="process-card reveal reveal-delay-sm">
+            <span class="process-card__num">02</span>
+            <div class="process-icon process-icon--mirror" aria-hidden="true"><span></span><i></i><span></span></div>
+            <h3>Verify states</h3>
+            <p>Compare mirrored states within a cycle and phase-aligned states across repeated cycles to expose where drift begins.</p>
+          </article>
+          <article class="process-card reveal reveal-delay">
+            <span class="process-card__num">03</span>
+            <div class="process-icon process-icon--reward" aria-hidden="true"><span>+</span><span>−</span></div>
+            <h3>Optimize dynamics</h3>
+            <p>Use structured rewards to teach actions as consistent state operators instead of memorized temporal patterns.</p>
+          </article>
+        </div>
+
+        <figure class="paper-figure paper-figure--wide reveal">
+          <a href="assets/figures/main.png" target="_blank" rel="noreferrer" aria-label="Open the WorldCycle method diagram at full size">
+            <img src="assets/figures/main.png" alt="WorldCycle method overview showing cycle action inputs, spatial and temporal cycle rewards, and DiffusionNFT optimization." loading="lazy">
+          </a>
+          <figcaption><span>Method overview</span> Mirrored spatial states and phase-aligned temporal states provide complementary, trajectory-level rewards.</figcaption>
+        </figure>
+
+        <div class="reward-grid">
+          <article class="reward-card reward-card--spatial reveal">
+            <div class="reward-card__top"><span class="reward-dot"></span><code>R<sub>spatial</sub></code></div>
+            <h3>Spatial closure</h3>
+            <p>Every partial forward trajectory has a corresponding reverse state that should coincide with it. Dense mirrored comparisons localize drift instead of relying on one sparse endpoint.</p>
+            <div class="reward-track" aria-hidden="true">
+              <span>o<sub>0</sub></span><i></i><span>o<sub>1</sub></span><i></i><span>o<sub>2</sub></span><i class="reward-track__turn"></i><span>o′<sub>1</sub></span><i></i><span>o′<sub>0</sub></span>
+            </div>
+          </article>
+          <article class="reward-card reward-card--temporal reveal reveal-delay-sm">
+            <div class="reward-card__top"><span class="reward-dot"></span><code>R<sub>temporal</sub></code></div>
+            <h3>Temporal consistency</h3>
+            <p>Repeated cycles should revisit the same phases. Comparing later executions to the first cycle penalizes position-dependent action drift over extended rollouts.</p>
+            <div class="phase-track" aria-hidden="true">
+              <span>cycle 1</span><i></i><span>cycle 2</span><i></i><span>cycle k</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--bench" id="cyclebench" aria-labelledby="bench-title">
+      <div class="container">
+        <div class="section-heading section-heading--split reveal">
+          <div>
+            <span class="section-index">03 / CycleBench</span>
+            <h2 id="bench-title">Evaluate the model<br><em>as a simulator.</em></h2>
+          </div>
+          <p>CycleBench diagnoses how transition errors accumulate when actions are reversible, repeated, composed, or cascaded.</p>
+        </div>
+
+        <div class="task-grid">
+          <article class="task-card reveal">
+            <span class="task-card__id">T1</span>
+            <div class="task-path task-path--line" aria-hidden="true"><span></span><i></i><span></span></div>
+            <h3>Reversible-Cycle</h3>
+            <p>Follow an action sequence, execute its inverse, and measure forward–reverse symmetry.</p>
+          </article>
+          <article class="task-card reveal reveal-delay-sm">
+            <span class="task-card__id">T2</span>
+            <div class="task-path task-path--square" aria-hidden="true"><span></span></div>
+            <h3>Closed-Cycle</h3>
+            <p>Trace a non-retracing loop and evaluate whether the endpoint returns to the initial state.</p>
+          </article>
+          <article class="task-card reveal reveal-delay">
+            <span class="task-card__id">T3</span>
+            <div class="task-path task-path--repeat" aria-hidden="true"><span></span><span></span><span></span></div>
+            <h3>Repeated-Cycle</h3>
+            <p>Repeat one closed program and track phase-aligned drift across executions.</p>
+          </article>
+          <article class="task-card reveal reveal-delay-lg">
+            <span class="task-card__id">T4</span>
+            <div class="task-path task-path--cascade" aria-hidden="true"><span></span><i></i><span></span></div>
+            <h3>Cascaded-Cycle</h3>
+            <p>Compose different closed cycles and test whether residuals propagate into later actions.</p>
+          </article>
+        </div>
+
+        <div class="bench-meta reveal">
+          <div><span>47</span><p>action trajectories</p></div>
+          <div><span>380</span><p>initial frames</p></div>
+          <div><span>4</span><p>scenario settings</p></div>
+          <div class="bench-meta__metrics"><code>ESC↓</code><code>RPS↓</code><code>RCS↓</code><p>state-consistency metrics</p></div>
+        </div>
+
+        <figure class="paper-figure paper-figure--bench reveal">
+          <a href="assets/figures/benchmark.png" target="_blank" rel="noreferrer" aria-label="Open the CycleBench overview at full size">
+            <img src="assets/figures/benchmark.png" alt="CycleBench overview with four benchmark tasks, metrics, and short-, mid-, long-term and composite-action settings." loading="lazy">
+          </a>
+          <figcaption><span>CycleBench</span> Four task families probe endpoint closure, reverse-path symmetry, repeated-cycle stability, and cross-cycle error propagation.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="comparisons" aria-labelledby="comparisons-title">
+      <div class="container">
+        <div class="section-heading section-heading--split reveal">
+          <div>
+            <span class="section-index">04 / Comparisons</span>
+            <h2 id="comparisons-title">Watch consistency<br><em>survive the horizon.</em></h2>
+          </div>
+          <p>Each synchronized group compares the WorldPlay base model, WorldCompass post-training, and WorldCycle under the same action program.</p>
+        </div>
+
+        <div class="comparison-shell reveal" id="comparisonShell">
+          <div class="comparison-toolbar">
+            <div class="scene-tabs" role="tablist" aria-label="Comparison scenario">
+              <button class="scene-tab active" id="tab-composite" role="tab" aria-selected="true" aria-controls="panel-composite" data-panel="composite">Composite action</button>
+              <button class="scene-tab" id="tab-long" role="tab" aria-selected="false" aria-controls="panel-long" data-panel="long">Long-term cycle</button>
+              <button class="scene-tab" id="tab-rectangle" role="tab" aria-selected="false" aria-controls="panel-rectangle" data-panel="rectangle">Rectangle cycle</button>
+            </div>
+            <button class="replay-button" type="button" data-replay aria-label="Replay the active comparison"><span aria-hidden="true">↻</span> Replay cycle</button>
+          </div>
+
+          <div class="comparison-progress" aria-hidden="true"><span data-progress></span></div>
+          <p class="comparison-status" aria-live="polite" data-video-status>Videos are synchronized to the same cycle.</p>
+
+          <div class="video-panel active" id="panel-composite" role="tabpanel" aria-labelledby="tab-composite" data-video-panel="composite">
+            <div class="scenario-note"><code>W + →</code><span>then inverse</span><code>S + ←</code></div>
+            <div class="video-grid">
+              <article class="video-card">
+                <div class="video-card__head"><span>WorldPlay</span><small>Base model</small></div>
+                <video controls muted playsinline preload="metadata" aria-label="WorldPlay composite-action result"><source src="assets/videos/composite-worldplay.mp4" type="video/mp4"></video>
+              </article>
+              <article class="video-card">
+                <div class="video-card__head"><span>WorldCompass</span><small>Post-trained</small></div>
+                <video controls muted playsinline preload="metadata" aria-label="WorldCompass composite-action result"><source src="assets/videos/composite-worldcompass.mp4" type="video/mp4"></video>
+              </article>
+              <article class="video-card video-card--ours">
+                <div class="video-card__head"><span>WorldCycle</span><small>Ours</small></div>
+                <video controls muted playsinline preload="metadata" aria-label="WorldCycle composite-action result"><source src="assets/videos/composite-worldcycle.mp4" type="video/mp4"></video>
+              </article>
+            </div>
+          </div>
+
+          <div class="video-panel" id="panel-long" role="tabpanel" aria-labelledby="tab-long" data-video-panel="long">
+            <div class="scenario-note"><code>5 cycles</code><span>381-frame long-horizon rollout</span></div>
+            <div class="video-grid">
+              <article class="video-card">
+                <div class="video-card__head"><span>WorldPlay</span><small>Base model</small></div>
+                <video controls muted playsinline preload="metadata" aria-label="WorldPlay long-term repeated-cycle result"><source src="assets/videos/long-term-worldplay.mp4" type="video/mp4"></video>
+              </article>
+              <article class="video-card">
+                <div class="video-card__head"><span>WorldCompass</span><small>Post-trained</small></div>
+                <video controls muted playsinline preload="metadata" aria-label="WorldCompass long-term repeated-cycle result"><source src="assets/videos/long-term-worldcompass.mp4" type="video/mp4"></video>
+              </article>
+              <article class="video-card video-card--ours">
+                <div class="video-card__head"><span>WorldCycle</span><small>Ours</small></div>
+                <video controls muted playsinline preload="metadata" aria-label="WorldCycle long-term repeated-cycle result"><source src="assets/videos/long-term-worldcycle.mp4" type="video/mp4"></video>
+              </article>
+            </div>
+          </div>
+
+          <div class="video-panel" id="panel-rectangle" role="tabpanel" aria-labelledby="tab-rectangle" data-video-panel="rectangle">
+            <div class="scenario-note"><code>W → S ←</code><span>non-retracing closed path</span></div>
+            <div class="video-grid">
+              <article class="video-card">
+                <div class="video-card__head"><span>WorldPlay</span><small>Base model</small></div>
+                <video controls muted playsinline preload="metadata" aria-label="WorldPlay rectangular closed-cycle result"><source src="assets/videos/rectangle-worldplay.mp4" type="video/mp4"></video>
+              </article>
+              <article class="video-card">
+                <div class="video-card__head"><span>WorldCompass</span><small>Post-trained</small></div>
+                <video controls muted playsinline preload="metadata" aria-label="WorldCompass rectangular closed-cycle result"><source src="assets/videos/rectangle-worldcompass.mp4" type="video/mp4"></video>
+              </article>
+              <article class="video-card video-card--ours">
+                <div class="video-card__head"><span>WorldCycle</span><small>Ours</small></div>
+                <video controls muted playsinline preload="metadata" aria-label="WorldCycle rectangular closed-cycle result"><source src="assets/videos/rectangle-worldcycle.mp4" type="video/mp4"></video>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--results" id="results" aria-labelledby="results-title">
+      <div class="container">
+        <div class="section-heading section-heading--split reveal">
+          <div>
+            <span class="section-index">05 / Results</span>
+            <h2 id="results-title">Lower drift.<br><em>Stronger control.</em></h2>
+          </div>
+          <p>WorldCycle improves state-returning consistency across horizons and generalizes to composite actions without sacrificing visual quality.</p>
+        </div>
+
+        <div class="result-highlights">
+          <article class="result-card reveal"><span>Short-term ESC</span><strong>−32%</strong><small>vs. WorldCompass</small></article>
+          <article class="result-card reveal reveal-delay-sm"><span>Short-term RPS</span><strong>−44%</strong><small>vs. WorldCompass</small></article>
+          <article class="result-card reveal reveal-delay"><span>Long-term RCS</span><strong>−34%</strong><small>vs. WorldCompass</small></article>
+          <article class="result-card reveal reveal-delay-lg"><span>Composite accuracy</span><strong>0.553</strong><small>4× the base model</small></article>
+        </div>
+
+        <div class="results-table-wrap reveal" tabindex="0" aria-label="Scrollable CycleBench results table">
+          <table class="results-table">
+            <caption>WorldCycle on CycleBench — weighted average over four benchmark tasks</caption>
+            <thead>
+              <tr><th scope="col">Setting</th><th scope="col">ESC ↓</th><th scope="col">RPS ↓</th><th scope="col">RCS ↓</th><th scope="col">Accuracy ↑</th><th scope="col">HPSv3 ↑</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Short-term <small>125 frames</small></th><td>0.026</td><td>0.019</td><td>0.020</td><td>0.833</td><td>11.24</td></tr>
+              <tr><th scope="row">Mid-term <small>253 frames</small></th><td>0.038</td><td>0.028</td><td>0.018</td><td>0.878</td><td>10.81</td></tr>
+              <tr><th scope="row">Composite <small>125 frames</small></th><td>0.057</td><td>0.042</td><td>0.026</td><td class="accent-cell">0.553</td><td>10.42</td></tr>
+              <tr><th scope="row">Long-term <small>381 frames</small></th><td>0.163</td><td>0.087</td><td>0.049</td><td>0.095</td><td>10.31</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <figure class="paper-figure paper-figure--wide reveal">
+          <a href="assets/figures/qualitative_figure.png" target="_blank" rel="noreferrer" aria-label="Open the qualitative CycleBench comparison at full size">
+            <img src="assets/figures/qualitative_figure.png" alt="Qualitative 253-frame comparison showing that WorldCycle better preserves scene colors, geometry, and structural details after returning." loading="lazy">
+          </a>
+          <figcaption><span>Qualitative comparison</span> After 253 frames, WorldCycle recovers states that remain closer to the initial scene under both composite and simple actions.</figcaption>
+        </figure>
+
+        <div class="training-layout">
+          <figure class="paper-figure paper-figure--training reveal">
+            <a href="assets/figures/training_curve.png" target="_blank" rel="noreferrer" aria-label="Open the WorldCycle training curves at full size">
+              <img src="assets/figures/training_curve.png" alt="Training curves showing improved HPSv3 quality and decreasing RPS, ESC, and RCS scores." loading="lazy">
+            </a>
+            <figcaption><span>Training dynamics</span> Cycle consistency improves while visual quality rises above the pre-trained baseline.</figcaption>
+          </figure>
+          <div class="training-note reveal reveal-delay-sm">
+            <span class="section-index">Consistency without collapse</span>
+            <h3>Better state dynamics do not trade away visual quality.</h3>
+            <p>The full model reaches an HPSv3 score of <strong>10.42</strong> on composite actions, a 16% gain over the 8.98 base-model score reported in the ablation.</p>
+            <div class="quality-meter" aria-label="Visual quality increased by 16 percent">
+              <span style="--value: 78%"><i>Base</i><b>8.98</b></span>
+              <span class="quality-meter__ours" style="--value: 91%"><i>WorldCycle</i><b>10.42</b></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--citation" id="citation" aria-labelledby="citation-title">
+      <div class="container citation-layout">
+        <div class="section-heading reveal">
+          <span class="section-index">06 / Citation</span>
+          <h2 id="citation-title">Build on the<br><em>closed loop.</em></h2>
+          <p class="citation-note">Citation metadata will be updated when the anonymous submission becomes public.</p>
+        </div>
+        <div class="code-card reveal reveal-delay-sm">
+          <div class="code-card__head"><span>BibTeX</span><button type="button" data-copy-citation aria-label="Copy BibTeX citation"><span aria-hidden="true">□</span> Copy</button></div>
+          <pre><code id="bibtex">@misc{anonymous_worldcycle,
+  title  = {WorldCycle: Self-Verifiable Reinforcement Learning
+            for Long-Horizon Video World Models},
+  author = {Anonymous},
+  note   = {Anonymous submission}
+}</code></pre>
+          <p class="copy-status" role="status" aria-live="polite" data-copy-status></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <a class="brand" href="#overview"><span class="brand-mark" aria-hidden="true"></span><span>World<span>Cycle</span></span></a>
+      <p>Self-verifiable reinforcement learning for long-horizon video world models.</p>
+      <span>Anonymous research submission</span>
+    </div>
+  </footer>
+</body>
+</html>
