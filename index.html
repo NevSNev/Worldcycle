@@ -254,7 +254,7 @@
             <div class="scene-tabs" role="tablist" aria-label="Comparison scenario">
               <button class="scene-tab active" id="tab-composite" role="tab" aria-selected="true" aria-controls="panel-composite" data-panel="composite">Composite action</button>
               <button class="scene-tab" id="tab-long" role="tab" aria-selected="false" aria-controls="panel-long" data-panel="long">Long-term cycle</button>
-              <button class="scene-tab" id="tab-rectangle" role="tab" aria-selected="false" aria-controls="panel-rectangle" data-panel="rectangle">Rectangle cycle</button>
+              <button class="scene-tab" id="tab-rectangle" role="tab" aria-selected="false" aria-controls="panel-rectangle" data-panel="rectangle">Short-term cycle</button>
             </div>
             <button class="replay-button" type="button" data-replay aria-label="Replay the active comparison"><span aria-hidden="true">↻</span> Replay cycle</button>
           </div>
@@ -281,7 +281,7 @@
           </div>
 
           <div class="video-panel" id="panel-long" role="tabpanel" aria-labelledby="tab-long" data-video-panel="long">
-            <div class="scenario-note"><code>5 cycles</code><span>381-frame long-horizon rollout</span></div>
+            <div class="scenario-note"><code>W · A · S · D</code><span>repeated across 5 cycles</span></div>
             <div class="video-grid">
               <article class="video-card">
                 <div class="video-card__head"><span>WorldPlay</span><small>Base model</small></div>
@@ -299,19 +299,19 @@
           </div>
 
           <div class="video-panel" id="panel-rectangle" role="tabpanel" aria-labelledby="tab-rectangle" data-video-panel="rectangle">
-            <div class="scenario-note"><code>W → S ←</code><span>non-retracing closed path</span></div>
+            <div class="scenario-note"><code>W · A · S · D</code><span>single closed cycle</span></div>
             <div class="video-grid">
               <article class="video-card">
                 <div class="video-card__head"><span>WorldPlay</span><small>Base model</small></div>
-                <video controls muted playsinline preload="metadata" aria-label="WorldPlay rectangular closed-cycle result"><source src="assets/videos/rectangle-worldplay.mp4" type="video/mp4"></video>
+                <video controls muted playsinline preload="metadata" aria-label="WorldPlay short-term cycle result"><source src="assets/videos/rectangle-worldplay.mp4" type="video/mp4"></video>
               </article>
               <article class="video-card">
                 <div class="video-card__head"><span>WorldCompass</span><small>Post-trained</small></div>
-                <video controls muted playsinline preload="metadata" aria-label="WorldCompass rectangular closed-cycle result"><source src="assets/videos/rectangle-worldcompass.mp4" type="video/mp4"></video>
+                <video controls muted playsinline preload="metadata" aria-label="WorldCompass short-term cycle result"><source src="assets/videos/rectangle-worldcompass.mp4" type="video/mp4"></video>
               </article>
               <article class="video-card video-card--ours">
                 <div class="video-card__head"><span>WorldCycle</span><small>Ours</small></div>
-                <video controls muted playsinline preload="metadata" aria-label="WorldCycle rectangular closed-cycle result"><source src="assets/videos/rectangle-worldcycle.mp4" type="video/mp4"></video>
+                <video controls muted playsinline preload="metadata" aria-label="WorldCycle short-term cycle result"><source src="assets/videos/rectangle-worldcycle.mp4" type="video/mp4"></video>
               </article>
             </div>
           </div>
