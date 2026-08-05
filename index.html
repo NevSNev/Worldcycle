@@ -137,27 +137,6 @@
           <p>WorldCycle turns analytically known action structure into trajectory-level rewards, making long-horizon post-training verifiable without future video labels.</p>
         </div>
 
-        <div class="process-grid">
-          <article class="process-card reveal">
-            <span class="process-card__num">01</span>
-            <div class="process-icon process-icon--cycle" aria-hidden="true"><span>W</span><span>S</span></div>
-            <h3>Construct cycles</h3>
-            <p>Compose ordinary action blocks with their inverses, then repeat the closed program across multiple temporal scales.</p>
-          </article>
-          <article class="process-card reveal reveal-delay-sm">
-            <span class="process-card__num">02</span>
-            <div class="process-icon process-icon--mirror" aria-hidden="true"><span></span><i></i><span></span></div>
-            <h3>Verify states</h3>
-            <p>Compare mirrored states within a cycle and phase-aligned states across repeated cycles to expose where drift begins.</p>
-          </article>
-          <article class="process-card reveal reveal-delay">
-            <span class="process-card__num">03</span>
-            <div class="process-icon process-icon--reward" aria-hidden="true"><span>+</span><span>−</span></div>
-            <h3>Optimize dynamics</h3>
-            <p>Use structured rewards to teach actions as consistent state operators instead of memorized temporal patterns.</p>
-          </article>
-        </div>
-
         <figure class="paper-figure paper-figure--wide reveal">
           <a href="assets/figures/main.png" target="_blank" rel="noreferrer" aria-label="Open the WorldCycle method diagram at full size">
             <img src="assets/figures/main.png" alt="WorldCycle method overview showing cycle action inputs, spatial and temporal cycle rewards, and DiffusionNFT optimization." loading="lazy">
