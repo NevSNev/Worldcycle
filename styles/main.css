@@ -354,6 +354,47 @@ img, video { max-width: 100%; }
   line-height: 1.5;
 }
 
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+
+.hero-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.48rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color 0.18s, color 0.18s, background 0.18s;
+}
+
+.hero-link-btn:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(94, 231, 231, 0.06);
+}
+
+.hero-link-btn svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+.hero-link-btn--todo {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+}
+
 .cycle-visual {
   position: relative;
   width: min(100%, 470px);

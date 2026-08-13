@@ -68,6 +68,20 @@
               <span><sup>3</sup>AI Technology Center, Tencent Video, Tencent</span>
             </div>
           </div>
+          <div class="hero-links">
+            <a href="https://arxiv.org/abs/2608.04964" class="hero-link-btn" target="_blank" rel="noreferrer">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h7v2H6v12h12v-5h2v7H4V4zm9 0h7v7h-2V7.414l-9.293 9.293-1.414-1.414L16.586 6H13V4z"/></svg>
+              Paper
+            </a>
+            <a href="https://arxiv.org/abs/2608.04964" class="hero-link-btn" target="_blank" rel="noreferrer">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm7 3c-1.1 0-2 .45-2.69 1.17L8 6l-1 1 1.31 1.31A3.97 3.97 0 0 0 8 10c0 2.21 1.79 4 4 4s4-1.79 4-4-1.79-4-4-4zm0 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+              arXiv
+            </a>
+            <a class="hero-link-btn hero-link-btn--todo" aria-disabled="true">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+              Code (coming soon)
+            </a>
+          </div>
         </div>
 
         <div class="cycle-visual reveal reveal-delay" aria-label="A closed action cycle returning to its starting state">
@@ -231,9 +245,9 @@
         <div class="comparison-shell reveal" id="comparisonShell">
           <div class="comparison-toolbar">
             <div class="scene-tabs" role="tablist" aria-label="Comparison scenario">
-              <button class="scene-tab active" id="tab-composite" role="tab" aria-selected="true" aria-controls="panel-composite" data-panel="composite">Composite action</button>
-              <button class="scene-tab" id="tab-long" role="tab" aria-selected="false" aria-controls="panel-long" data-panel="long">Long-term cycle</button>
-              <button class="scene-tab" id="tab-rectangle" role="tab" aria-selected="false" aria-controls="panel-rectangle" data-panel="rectangle">Short-term cycle</button>
+              <button class="scene-tab active" id="tab-composite" role="tab" aria-selected="true" aria-controls="panel-composite" data-panel="composite">T4 · Cascaded-Cycle</button>
+              <button class="scene-tab" id="tab-long" role="tab" aria-selected="false" aria-controls="panel-long" data-panel="long">T3 · Repeated-Cycle</button>
+              <button class="scene-tab" id="tab-rectangle" role="tab" aria-selected="false" aria-controls="panel-rectangle" data-panel="rectangle">T2 · Closed-Cycle</button>
             </div>
             <button class="replay-button" type="button" data-replay aria-label="Replay the active comparison"><span aria-hidden="true">↻</span> Replay cycle</button>
           </div>
